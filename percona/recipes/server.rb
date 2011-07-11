@@ -1,6 +1,21 @@
 include_recipe "percona::default"
 
-package "percona-server-server"
+case platform
+when "redhat","centos","fedora"
+  package "Percona-Server-server-51"
+
+when "debian","ubuntu"
+  package "percona-server-server"
+end
+
+
+directory "/var/log/mysql" do
+  owner "mysql"
+  group "mysql"
+  mode 0755
+  action :create
+end
+
 
 def generate_id
   Chef::Log.info "Percona server-id: #{node.percona.server_id}"
